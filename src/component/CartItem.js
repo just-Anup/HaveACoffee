@@ -16,6 +16,9 @@ import {
   SPACING,
 } from '../Theme/theme';
 import CustomIcon from './CustomIcon';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 const CartItem = ({
   id,
   name,
@@ -72,7 +75,7 @@ const CartItem = ({
          onPress={() => {
            decrementCartItemQuantityHandler(id, data.size);
          }}>
-         <CustomIcon
+         <FontAwesome
            name="minus"
            color={COLORS.primaryWhiteHex}
            size={FONTSIZE.size_10}
@@ -88,11 +91,12 @@ const CartItem = ({
          onPress={() => {
            incrementCartItemQuantityHandler(id, data.size);
          }}>
-         <CustomIcon
+         <FontAwesome6
            name="add"
            color={COLORS.primaryWhiteHex}
            size={FONTSIZE.size_10}
          />
+
        </TouchableOpacity>
      </View>
    </View>
@@ -134,7 +138,7 @@ const CartItem = ({
                 onPress={() => {
                   decrementCartItemQuantityHandler(id, prices[0].size);
                 }}>
-                <CustomIcon
+                <FontAwesome
                   name="minus"
                   color={COLORS.primaryWhiteHex}
                   size={FONTSIZE.size_10}
@@ -150,7 +154,7 @@ const CartItem = ({
                 onPress={() => {
                   incrementCartItemQuantityHandler(id, prices[0].size);
                 }}>
-                <CustomIcon
+                <FontAwesome6
                   name="add"
                   color={COLORS.primaryWhiteHex}
                   size={FONTSIZE.size_10}

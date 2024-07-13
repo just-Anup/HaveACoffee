@@ -9,6 +9,7 @@ import {
   SPACING,
 } from '../Theme/theme';
 import CustomIcon from './CustomIcon';
+import { Entypo } from '@expo/vector-icons';
 
 
 const PaymentMethod = ({
@@ -33,11 +34,12 @@ const PaymentMethod = ({
           colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
           style={styles.LinearGradientWallet}>
           <View style={styles.WalletRow}>
-            <CustomIcon
+            <Entypo
               name={'wallet'}
               color={COLORS.primaryOrangeHex}
               size={FONTSIZE.size_30}
             />
+          
             <Text style={styles.PaymentTitle}>{name}</Text>
           </View>
           <Text style={styles.PaymentPrice}>$ 100.50</Text>

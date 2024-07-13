@@ -18,6 +18,7 @@ import {
 } from '../Theme/theme';
 import ImageBackgroundInfo from '../component/ImageBackgroundInfo';
 import PaymentFooter from '../component/PaymentFooter';
+import Icon from 'react-native-vector-icons/Ionicons';
 const DetailScreen =  ({navigation, route}) => {
   const ItemOfIndex = useStore((state) =>
     route.params.type == 'Coffee' ? state.CoffeeList : state.BeanList,

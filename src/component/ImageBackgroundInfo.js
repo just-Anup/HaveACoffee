@@ -15,6 +15,9 @@ import {
   SPACING,
 } from '../Theme/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { AntDesign } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 
 const ImageBackgroundInfo = ({
@@ -43,10 +46,10 @@ const ImageBackgroundInfo = ({
                 onPress={() => {
                   BackHandler();
                 }}>
-                <Icon
-                  name="left"
-                  color={COLORS.primaryLightGreyHex}
-                  size={FONTSIZE.size_16}
+                <AntDesign
+                  name="leftcircle"
+                  color={COLORS.primaryBlackHex}
+                  size={FONTSIZE.size_30}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -54,11 +57,11 @@ const ImageBackgroundInfo = ({
                   ToggleFavourite(favourite, type, id);
                 }}>
                 <Icon
-                  name="like"
+                  name="heart"
                   color={
-                    favourite ? COLORS.primaryRedHex : COLORS.primaryLightGreyHex
+                    favourite ? COLORS.primaryRedHex : COLORS.primaryGreyHex
                   }
-                  size={FONTSIZE.size_16}
+                  size={FONTSIZE.size_30}
                 />
               </TouchableOpacity>
             </View>
@@ -69,7 +72,7 @@ const ImageBackgroundInfo = ({
                   ToggleFavourite(favourite, type, id);
                 }}>
                 <Icon
-                  name="like"
+                  name="heart"
                   color={
                     favourite ? COLORS.primaryRedHex : COLORS.primaryLightGreyHex
                   }
@@ -90,11 +93,12 @@ const ImageBackgroundInfo = ({
                 </View>
                 <View style={styles.ItemPropertiesContainer}>
                   <View style={styles.ProperFirst}>
-                    <Icon
-                      name={type == 'Bean' ? 'bean' : 'beans'}
+                    <Fontisto
+                      name={type == 'coffeescript' ? 'coffeescript' : 'coffeescript'}
                       size={type == 'Bean' ? FONTSIZE.size_18 : FONTSIZE.size_24}
                       color={COLORS.primaryOrangeHex}
                     />
+                    
                     <Text
                       style={[
                         styles.PropertyTextFirst,
@@ -109,8 +113,8 @@ const ImageBackgroundInfo = ({
                     </Text>
                   </View>
                   <View style={styles.ProperFirst}>
-                    <Icon
-                      name={type == 'Bean' ? 'location' : 'drop'}
+                    <Entypo
+                      name={type == 'drop' ? 'drop' : 'drop'}
                       size={FONTSIZE.size_16}
                       color={COLORS.primaryOrangeHex}
                     />

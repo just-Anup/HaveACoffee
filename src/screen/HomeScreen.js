@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StatusBar,
@@ -19,7 +19,7 @@ import {
   SPACING,
 } from '../Theme/theme';
 import HeaderBar from '../component/HeaderBar';
-import CustomIcon from '../component/CustomIcon';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {FlatList} from 'react-native';
 import CoffeeCard from '../component/CoffeeCard'
 import {Dimensions} from 'react-native';
@@ -65,6 +65,15 @@ const HomeScreen = ({navigation}) => {
     getCoffeeList(categoryIndex.category, CoffeeList),
   );
   const tabBarHeight = useBottomTabBarHeight();
+
+  useEffect(() => {
+    const filteredCoffee = getCoffeeList(categoryIndex.category, CoffeeList).filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setSortedCoffee(filteredCoffee);
+  }, [searchText, categoryIndex, CoffeeList]);
+
   const CoffeCardAddToCart = ({
     id,
     index,
@@ -95,176 +104,173 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.ScreenContainer}>
-    <StatusBar backgroundColor={COLORS.primaryBlackHex} />
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.ScrollViewFlex}>
-      {/* App Header */}
-      <HeaderBar />
+      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ScrollViewFlex}>
+        
+        {/* App Header */}
+        <HeaderBar />
+        <Text style={styles.ScreenTitle}>
+          Find the best{'\n'}coffee for you
+        </Text>
 
-      <Text style={styles.ScreenTitle}>
-        Find the best{'\n'}coffee for you
-      </Text>
+        {/* Search Input */}
 
-      {/* Search Input */}
-
-      <View style={styles.InputContainerComponent}>
-        <TouchableOpacity>
-          <CustomIcon
-            style={styles.InputIcon}
-            name="search"
-            size={FONTSIZE.size_18}
-            color={
-              searchText.length > 0
-                ? COLORS.primaryOrangeHex
-                : COLORS.primaryLightGreyHex
-            }
-          />
-        </TouchableOpacity>
-        <TextInput
-          placeholder="Find Your Coffee..."
-          value={searchText}
-          onChangeText={text => {
-            setSearchText(text);
-          }}
-          placeholderTextColor={COLORS.primaryLightGreyHex}
-          style={styles.TextInputContainer}
-        />
-        {searchText.length > 0 ? (
-          <TouchableOpacity
-           >
-            <CustomIcon
+        <View style={styles.InputContainerComponent}>
+          <TouchableOpacity>
+            <Icon
               style={styles.InputIcon}
-              name="close"
-              size={FONTSIZE.size_16}
-              color={COLORS.primaryLightGreyHex}
+              name="search"
+              size={FONTSIZE.size_18}
+              color={
+                searchText.length > 0
+                  ? COLORS.primaryOrangeHex
+                  : COLORS.primaryLightGreyHex
+              }
             />
           </TouchableOpacity>
-        ) : (
-          <></>
-        )}
-      </View>
-
-      {/* Category Scroller */}
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.CategoryScrollViewStyle}>
-        {categories.map((data, index) => (
-          <View
-            key={index.toString()}
-            style={styles.CategoryScrollViewContainer}>
+          <TextInput
+            placeholder="Find Your Coffee..."
+            value={searchText}
+            onChangeText={text => {
+              setSearchText(text);
+            }}
+            placeholderTextColor={COLORS.primaryLightGreyHex}
+            style={styles.TextInputContainer}
+          />
+          {searchText.length > 0 ? (
             <TouchableOpacity
-              style={styles.CategoryScrollViewItem}
               onPress={() => {
-               
-                setCategoryIndex({index: index, category: categories[index]});
-                setSortedCoffee([
-                  ...getCoffeeList(categories[index], CoffeeList),
-                ]);
+                setSearchText('');
               }}>
-              <Text
-                style={[
-                  styles.CategoryText,
-                  categoryIndex.index == index
-                    ? {color: COLORS.primaryOrangeHex}
-                    : {},
-                ]}>
-                {data}
-              </Text>
-              {categoryIndex.index == index ? (
-                <View style={styles.ActiveCategory} />
-              ) : (
-                <></>
-              )}
+              <Icon
+                style={styles.InputIcon}
+                name="close"
+                size={FONTSIZE.size_16}
+                color={COLORS.primaryLightGreyHex}
+              />
             </TouchableOpacity>
-          </View>
-        ))}
+          ) : (
+            <></>
+          )}
+        </View>
+
+        {/* Category Scroller */}
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.CategoryScrollViewStyle}>
+          {categories.map((data, index) => (
+            <View
+              key={index.toString()}
+              style={styles.CategoryScrollViewContainer}>
+              <TouchableOpacity
+                style={styles.CategoryScrollViewItem}
+                onPress={() => {
+                  setCategoryIndex({index: index, category: categories[index]});
+                }}>
+                <Text
+                  style={[
+                    styles.CategoryText,
+                    categoryIndex.index == index
+                      ? {color: COLORS.primaryOrangeHex}
+                      : {},
+                  ]}>
+                  {data}
+                </Text>
+                {categoryIndex.index == index ? (
+                  <View style={styles.ActiveCategory} />
+                ) : (
+                  <></>
+                )}
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
+
+        {/* Coffee Flatlist */}
+
+        <FlatList
+          horizontal
+          ListEmptyComponent={
+            <View style={styles.EmptyListContainer}>
+              <Text style={styles.CategoryText}>No Coffee Available</Text>
+            </View>
+          }
+          showsHorizontalScrollIndicator={false}
+          data={sortedCoffee}
+          contentContainerStyle={styles.FlatListContainer}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push('DetailScreen', {
+                    index: item.index,
+                    id: item.id,
+                    type: item.type,
+                  });
+                }}>
+                <CoffeeCard
+                  id={item.id}
+                  index={item.index}
+                  type={item.type}
+                  roasted={item.roasted}
+                  imagelink_square={item.imagelink_square}
+                  name={item.name}
+                  special_ingredient={item.special_ingredient}
+                  average_rating={item.average_rating}
+                  price={item.prices[2]}
+                  buttonPressHandler={() => addToCart(item)}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+
+        <Text style={styles.CoffeeBeansTitle}>Coffee Beans</Text>
+
+        {/* Beans Flatlist */}
+
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={BeanList}
+          contentContainerStyle={[
+            styles.FlatListContainer,
+            {marginBottom: tabBarHeight},
+          ]}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  // Handle item press without navigation
+                  console.log('Item pressed:', item); // or any other action you want to perform
+                }}>
+                <CoffeeCard
+                  id={item.id}
+                  index={item.index}
+                  type={item.type}
+                  roasted={item.roasted}
+                  imagelink_square={item.imagelink_square}
+                  name={item.name}
+                  special_ingredient={item.special_ingredient}
+                  average_rating={item.average_rating}
+                  price={item.prices[2]}
+                  buttonPressHandler={() => addToCart(item)}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
       </ScrollView>
-
-      {/* Coffee Flatlist */}
-
-      <FlatList
-    
-        horizontal
-        ListEmptyComponent={
-          <View style={styles.EmptyListContainer}>
-            <Text style={styles.CategoryText}>No Coffee Available</Text>
-          </View>
-        }
-        showsHorizontalScrollIndicator={false}
-        data={sortedCoffee}
-        contentContainerStyle={styles.FlatListContainer}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.push('DetailScreen', {
-                  index: item.index,
-                  id: item.id,
-                  type: item.type,
-                });
-              }}>
-              <CoffeeCard
-                id={item.id}
-                index={item.index}
-                type={item.type}
-                roasted={item.roasted}
-                imagelink_square={item.imagelink_square}
-                name={item.name}
-                special_ingredient={item.special_ingredient}
-                average_rating={item.average_rating}
-                price={item.prices[2]}
-        buttonPressHandler={() => addToCart(item)}
-              />
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-      <Text style={styles.CoffeeBeansTitle}>Coffee Beans</Text>
-
-      {/* Beans Flatlist */}
-
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={BeanList}
-        contentContainerStyle={[
-          styles.FlatListContainer,
-          {marginBottom: tabBarHeight},
-        ]}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity
-            onPress={() => {
-              // Handle item press without navigation
-              console.log('Item pressed:', item); // or any other action you want to perform
-            }}>
-              <CoffeeCard
-                id={item.id}
-                index={item.index}
-                type={item.type}
-                roasted={item.roasted}
-                imagelink_square={item.imagelink_square}
-                name={item.name}
-                special_ingredient={item.special_ingredient}
-                average_rating={item.average_rating}
-                price={item.prices[2]}
-                buttonPressHandler={() => addToCart(item)}
-              />
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </ScrollView>
-  </View>
-  )
+    </View>
+  );
 }
- 
+
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,

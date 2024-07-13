@@ -3,11 +3,12 @@ import React from 'react';
 import {COLORS, FONTFAMILY, FONTSIZE, SPACING} from '../Theme/theme';
 
 import ProfilePic from '../component/ProfilePic';
+import GradientBGIcon from './GradientBGIcon';
 
 const HeaderBar = ({title}) => {
   return (
     <View style={styles.HeaderContainer}>
-     
+     <GradientBGIcon/>
       <Text style={styles.HeaderText}>{title}</Text>
       <ProfilePic />
     </View>

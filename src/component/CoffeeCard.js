@@ -64,6 +64,7 @@ const CARD_WIDTH = Dimensions.get('window').width * 0.32;
                     name,
                     special_ingredient,
                     prices: [{...price, quantity: 1}],
+                    
                   });
                 }}><TouchableOpacity  onPress={() => buttonPressHandler()}>
                 <Icon
@@ -79,6 +80,7 @@ const CARD_WIDTH = Dimensions.get('window').width * 0.32;
         );
   
 }
+
 
 export default CoffeeCard
 

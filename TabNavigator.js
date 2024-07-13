@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     tabBarStyle: {
         height: 80,
         position: 'absolute',
-        backgroundColor: COLORS.primaryBlackRGBA,
+        backgroundColor: COLORS.primaryBlackHex,
         borderTopWidth: 0,
         elevation: 0,
         borderTopColor: 'transparent',
